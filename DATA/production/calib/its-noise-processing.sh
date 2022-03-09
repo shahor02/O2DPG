@@ -29,7 +29,7 @@ fi
 [[ -z $NITSDECTPIPELINES ]] && NITSDECTPIPELINES=6
   
 WORKFLOW="o2-dpl-raw-proxy ${ARGS_ALL} --dataspec \"$PROXY_INSPEC\" --channel-config \"name=readout-proxy,type=pull,method=connect,address=ipc://@$INRAWCHANNAME,transport=shmem,rateLogging=1\" | "
-WORKFLOW+="o2-itsmft-stf-decoder-workflow ${ARGS_ALL} ${OUTTYPE} --configKeyValues \"$ARGS_ALL_CONFIG\" --nthreads ${NITSDECTHREADS} --pipeline its-stf-decoder:${NITSDECTPIPELINES} | "
+WORKFLOW+="o2-itsmft-stf-decoder-workflow ${ARGS_ALL} ${OUTTYPE} --ignore-noise-map --configKeyValues \"$ARGS_ALL_CONFIG\" --nthreads ${NITSDECTHREADS} --pipeline its-stf-decoder:${NITSDECTPIPELINES} | "
 WORKFLOW+="o2-dpl-output-proxy ${ARGS_ALL} --dataspec \"$PROXY_OUTSPEC\" --proxy-channel-name its-noise-input-proxy --channel-config \"name=its-noise-input-proxy,method=connect,type=push,transport=zeromq,rateLogging=1\" | "
 WORKFLOW+="o2-dpl-run ${ARGS_ALL} ${GLOBALDPLOPT}"
 
