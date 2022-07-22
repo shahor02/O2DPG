@@ -32,6 +32,9 @@ if [[ $BEAMTYPE != "cosmic" ]] || [[ $FORCECALIBRATIONS == 1 ]] ; then
 
   # calibrations for TPC
   if has_detector_calib TPC; then
+    if has_detectors ITS && has_detector_matching ITSTPC; then
+       if [[ -z ${CALIB_TPC_VDRIFTTGL+x} ]]; then CALIB_TPC_VDRIFTTGL=1; fi
+    fi
     if has_detectors ITS TPC TOF TRD; then
       if has_detectors TPC ITS TRD TOF && has_detector_matching ITSTPCTRDTOF; then
         if [[ -z ${CALIB_TPC_SCDCALIB+x} ]]; then CALIB_TPC_SCDCALIB=1; fi
@@ -72,6 +75,7 @@ fi
 [[ -z ${CALIB_TOF_CHANNELOFFSETS} ]] && CALIB_TOF_CHANNELOFFSETS=0
 [[ -z ${CALIB_TOF_DIAGNOSTICS} ]] && CALIB_TOF_DIAGNOSTICS=0
 [[ -z ${CALIB_TPC_SCDCALIB} ]] && CALIB_TPC_SCDCALIB=0
+[[ -z ${CALIB_TPC_VDRIFTTGL} ]] && CALIB_TPC_VDRIFTTGL=0
 [[ -z ${CALIB_TPC_TIMEGAIN} ]] && CALIB_TPC_TIMEGAIN=0
 [[ -z ${CALIB_TPC_RESPADGAIN} ]] && CALIB_TPC_RESPADGAIN=0
 [[ -z ${CALIB_TRD_VDRIFTEXB} ]] && CALIB_TRD_VDRIFTEXB=0
@@ -111,6 +115,7 @@ if [[ -z $CALIBDATASPEC_BARREL_TF ]]; then
   if [[ $CALIB_TPC_TIMEGAIN == 1 ]]; then add_semicolon_separated CALIBDATASPEC_BARREL_TF "tpcmips:TPC/MIPS/0"; fi
   if [[ $CALIB_TPC_SCDCALIB == 1 ]]; then add_semicolon_separated CALIBDATASPEC_BARREL_TF "unbinnedTPCResiduals:GLO/UNBINNEDRES/0"; fi
   if [[ $CALIB_TPC_SCDCALIB == 1 ]] && [[ 0$CALIB_TPC_SCDCALIB_SENDTRKDATA == "01" ]]; then add_semicolon_separated CALIBDATASPEC_BARREL_TF "tpcInterpTrkData:GLO/TRKDATA/0"; fi
+  if [[ $CALIB_TPC_VDRIFTTGL == 1 ]]; then add_semicolon_separated CALIBDATASPEC_BARREL_TF "tpcitsdtgl:GLO/TPCITS_VDTGL/0"; fi
 
   # TRD
   if [[ $CALIB_TRD_VDRIFTEXB == 1 ]]; then add_semicolon_separated CALIBDATASPEC_BARREL_TF "angResHistoTRD:TRD/ANGRESHISTS/0"; fi
